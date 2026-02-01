@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Category - COO Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --navy-dark: #1E293B;
+      --electric-blue: #0EA5E9;
+      --cyan: #06B6D4;
+      --emerald: #10B981;
+      --amber: #F59E0B;
+      --slate-50: #F8FAFC;
+      --slate-100: #F1F5F9;
+      --slate-200: #E2E8F0;
+      --slate-700: #334155;
+      --slate-800: #1E293B;
+      --slate-900: #0F172A;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--slate-50);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Top Navigation */
+    .navbar {
+      background: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+    }
+    
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .back-btn {
+      padding: 8px 16px;
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: 8px;
+      color: var(--slate-700);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .back-btn:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+    }
+    
+    .breadcrumb {
+      font-size: 14px;
+      color: var(--slate-600);
+      font-weight: 500;
+    }
+    
+    .breadcrumb a {
+      color: var(--electric-blue);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .breadcrumb a:hover {
+      color: var(--cyan);
+    }
+    
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--electric-blue), var(--cyan));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    
+    /* Main Content */
+    .container {
+      flex: 1;
+      padding: 40px;
+      max-width: 1600px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    
+    .page-header {
+      margin-bottom: 40px;
+    }
+    
+    .page-title {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--slate-900);
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .page-icon {
+      font-size: 40px;
+    }
+    
+    .page-subtitle {
+      font-size: 16px;
+      color: var(--slate-600);
+    }
+    
+    /* Sheets Grid */
+    .sheets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    
+    .sheet-card {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .sheet-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--electric-blue), var(--cyan));
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    
+    .sheet-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(14, 165, 233, 0.15);
+    }
+    
+    .sheet-card:hover::before {
+      transform: scaleX(1);
+    }
+    
+    .sheet-type-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: rgba(14, 165, 233, 0.1);
+      color: var(--electric-blue);
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+    
+    .sheet-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--slate-900);
+      margin-bottom: 8px;
+    }
+    
+    .sheet-arrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--electric-blue);
+      transition: gap 0.3s;
+      margin-top: 16px;
+    }
+    
+    .sheet-card:hover .sheet-arrow {
+      gap: 12px;
+    }
+    
+    /* Loading & Empty */
+    .loading, .empty-state {
+      text-align: center;
+      padding: 100px 20px;
+    }
+    
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid rgba(14, 165, 233, 0.2);
+      border-top-color: var(--electric-blue);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 20px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .error {
+      background: rgba(244, 63, 94, 0.1);
+      color: #F43F5E;
+      padding: 20px;
+      border-radius: 12px;
+      border-left: 4px solid #F43F5E;
+      font-weight: 600;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Navigation -->
+  <div class="navbar">
+    <div class="nav-left">
+      <button class="back-btn" onclick="goBack()">
+        ← Back
+      </button>
+      <div class="breadcrumb">
+        <a href="portal.html">Home</a> / <span id="categoryBreadcrumb">Category</span>
+      </div>
+    </div>
+    <div class="user-avatar" id="userAvatar" onclick="window.location.href='portal.html'">CO</div>
+  </div>
+  
+  <!-- Main Content -->
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">
+        <span class="page-icon" id="pageIcon">📊</span>
+        <span id="pageTitle">Loading...</span>
+      </h1>
+      <p class="page-subtitle" id="pageSubtitle">Select a sheet to view</p>
+    </div>
+    
+    <div id="content">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p style="color: var(--slate-600); font-weight: 600;">Loading sheets...</p>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    
+    if (!token) {
+      window.location.href = 'login.html';
+    }
+    
+    // Set user avatar
+    const initials = (user.name || user.email || 'U').substring(0, 2).toUpperCase();
+    document.getElementById('userAvatar').textContent = initials;
+    
+    // Get category from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryId = urlParams.get('category');
+    
+    if (!categoryId) {
+      window.location.href = 'portal.html';
+    }
+    
+    // Load category data
+    loadCategory();
+    
+    function loadCategory() {
+      try {
+        // Get navigation from sessionStorage (set by portal page)
+        const navigationStr = sessionStorage.getItem('navigation');
+        if (!navigationStr) {
+          showError('Navigation data not found. Please go back to home.');
+          return;
+        }
+        
+        const navigation = JSON.parse(navigationStr);
+        const category = navigation.find(c => c.category_id === categoryId);
+        
+        if (!category) {
+          showError('Category not found');
+          return;
+        }
+        
+        // Set page title
+        document.getElementById('pageTitle').textContent = category.display_name;
+        document.getElementById('pageIcon').textContent = category.icon || '📊';
+        document.getElementById('categoryBreadcrumb').textContent = category.display_name;
+        document.getElementById('pageSubtitle').textContent = `${category.sheets.length} sheet${category.sheets.length !== 1 ? 's' : ''} available`;
+        
+        // Render sheets
+        renderSheets(category.sheets);
+        
+      } catch (error) {
+        console.error('Load category error:', error);
+        showError('Failed to load category: ' + error.message);
+      }
+    }
+    
+    function renderSheets(sheets) {
+      const content = document.getElementById('content');
+      
+      if (!sheets || sheets.length === 0) {
+        content.innerHTML = `
+          <div class="empty-state">
+            <div style="font-size: 64px; margin-bottom: 20px; opacity: 0.5;">📭</div>
+            <h2 style="margin-bottom: 12px;">No Sheets Available</h2>
+            <p>Contact your administrator to set up sheets for this category.</p>
+          </div>
+        `;
+        return;
+      }
+      
+      let html = '<div class="sheets-grid">';
+      
+      for (const sheet of sheets) {
+        const viewTypeLabel = getViewTypeLabel(sheet.view_type);
+        
+        html += `
+          <div class="sheet-card" onclick="goToSheet('${sheet.sheet_name}', '${sheet.view_type}')">
+            <span class="sheet-type-badge">${viewTypeLabel}</span>
+            <h3 class="sheet-name">${sheet.display_name}</h3>
+            <div class="sheet-arrow">View ${viewTypeLabel} →</div>
+          </div>
+        `;
+      }
+      
+      html += '</div>';
+      content.innerHTML = html;
+    }
+    
+    function getViewTypeLabel(viewType) {
+      const labels = {
+        'table': 'Table',
+        'matrix': 'Matrix',
+        'kpis': 'Dashboard'
+      };
+      return labels[viewType] || 'View';
+    }
+    
+    function goToSheet(sheetName, viewType) {
+      window.location.href = `sheet.html?category=${categoryId}&sheet=${encodeURIComponent(sheetName)}&view=${viewType}`;
+    }
+    
+    function goBack() {
+      window.location.href = 'portal.html';
+    }
+    
+    function showError(message) {
+      const content = document.getElementById('content');
+      content.innerHTML = `<div class="error">❌ ${message}</div>`;
+    }
+  </script>
+</body>
+</html>

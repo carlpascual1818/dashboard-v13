@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal - COO Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --navy-dark: #1E293B;
+      --electric-blue: #0EA5E9;
+      --cyan: #06B6D4;
+      --emerald: #10B981;
+      --amber: #F59E0B;
+      --slate-50: #F8FAFC;
+      --slate-100: #F1F5F9;
+      --slate-200: #E2E8F0;
+      --slate-700: #334155;
+      --slate-800: #1E293B;
+      --slate-900: #0F172A;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, var(--slate-50) 0%, #E0E7FF 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Top Navigation */
+    .navbar {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 100;
+    }
+    
+    .logo {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--electric-blue), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+    
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--electric-blue), var(--cyan));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    
+    .user-info {
+      text-align: right;
+    }
+    
+    .user-name {
+      font-weight: 600;
+      color: var(--slate-800);
+      font-size: 14px;
+    }
+    
+    .user-company {
+      font-size: 12px;
+      color: var(--slate-700);
+    }
+    
+    .logout-btn {
+      padding: 8px 16px;
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: 8px;
+      color: var(--slate-700);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s;
+      margin-left: 16px;
+    }
+    
+    .logout-btn:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+    }
+    
+    /* Main Content */
+    .container {
+      flex: 1;
+      padding: 60px 40px;
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    .welcome-section {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    
+    .welcome-title {
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--slate-900);
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+    
+    .welcome-subtitle {
+      font-size: 18px;
+      color: var(--slate-700);
+      font-weight: 500;
+    }
+    
+    /* Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+      margin-bottom: 40px;
+    }
+    
+    .portal-card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .portal-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--electric-blue), var(--cyan));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .portal-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 40px rgba(14, 165, 233, 0.2);
+    }
+    
+    .portal-card:hover::before {
+      transform: scaleX(1);
+    }
+    
+    .card-icon {
+      font-size: 48px;
+      margin-bottom: 24px;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .portal-card:hover .card-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+    
+    .card-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--slate-900);
+      margin-bottom: 12px;
+    }
+    
+    .card-count {
+      font-size: 14px;
+      color: var(--slate-700);
+      margin-bottom: 20px;
+    }
+    
+    .card-arrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--electric-blue);
+      transition: gap 0.3s;
+    }
+    
+    .portal-card:hover .card-arrow {
+      gap: 12px;
+    }
+    
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 100px 20px;
+    }
+    
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid rgba(14, 165, 233, 0.2);
+      border-top-color: var(--electric-blue);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 20px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .error {
+      background: rgba(244, 63, 94, 0.1);
+      color: #F43F5E;
+      padding: 20px;
+      border-radius: 12px;
+      border-left: 4px solid #F43F5E;
+      font-weight: 600;
+      margin: 20px 0;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 100px 20px;
+      color: var(--slate-600);
+    }
+    
+    .empty-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Navigation -->
+  <div class="navbar">
+    <div class="logo">⚡ COO Dashboard</div>
+    <div class="user-profile">
+      <div class="user-avatar" id="userAvatar">CO</div>
+      <div class="user-info">
+        <div class="user-name" id="userName">Loading...</div>
+        <div class="user-company" id="userCompany">Loading...</div>
+      </div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </div>
+  
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <h1 class="welcome-title">Welcome back, <span id="welcomeName">User</span>! 👋</h1>
+      <p class="welcome-subtitle">Choose where you'd like to go</p>
+    </div>
+    
+    <!-- Content (will be loaded) -->
+    <div id="content">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p style="color: var(--slate-600); font-weight: 600;">Loading your dashboard...</p>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // ⚠️ IMPORTANT: Update with your Apps Script URL
+    const API_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+    
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    
+    if (!token) {
+      window.location.href = 'login.html';
+    }
+    
+    // Set user info
+    document.getElementById('userName').textContent = user.name || 'User';
+    document.getElementById('userCompany').textContent = user.company_name || '';
+    document.getElementById('welcomeName').textContent = (user.name || 'User').split(' ')[0];
+    
+    const initials = (user.name || user.email || 'U').substring(0, 2).toUpperCase();
+    document.getElementById('userAvatar').textContent = initials;
+    
+    // Load navigation
+    loadNavigation();
+    
+    async function loadNavigation() {
+      try {
+        const url = `${API_URL}?action=navigation&token=${token}`;
+        const response = await fetch(url);
+        const result = await response.json();
+        
+        if (result.success) {
+          renderCategories(result.data.navigation);
+        } else {
+          showError(result.error);
+        }
+      } catch (error) {
+        console.error('Load navigation error:', error);
+        showError('Failed to load navigation: ' + error.message);
+      }
+    }
+    
+    function renderCategories(categories) {
+      const content = document.getElementById('content');
+      
+      if (!categories || categories.length === 0) {
+        content.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📭</div>
+            <h2 style="margin-bottom: 12px;">No Categories Available</h2>
+            <p>Contact your administrator to set up your dashboard.</p>
+          </div>
+        `;
+        return;
+      }
+      
+      let html = '<div class="cards-grid">';
+      
+      for (const category of categories) {
+        const sheetCount = category.sheets ? category.sheets.length : 0;
+        
+        html += `
+          <div class="portal-card" onclick="goToCategory('${category.category_id}')">
+            <div class="card-icon">${category.icon || '📊'}</div>
+            <h3 class="card-title">${category.display_name}</h3>
+            <p class="card-count">${sheetCount} sheet${sheetCount !== 1 ? 's' : ''} available</p>
+            <div class="card-arrow">Open ${category.display_name} →</div>
+          </div>
+        `;
+      }
+      
+      html += '</div>';
+      content.innerHTML = html;
+      
+      // Store navigation in sessionStorage for category page
+      sessionStorage.setItem('navigation', JSON.stringify(categories));
+    }
+    
+    function goToCategory(categoryId) {
+      window.location.href = `category.html?category=${categoryId}`;
+    }
+    
+    function showError(message) {
+      const content = document.getElementById('content');
+      content.innerHTML = `<div class="error">❌ ${message}</div>`;
+    }
+    
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      sessionStorage.clear();
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

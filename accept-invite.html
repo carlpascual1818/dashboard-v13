@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accept Invite - COO Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    body::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: drift 20s linear infinite;
+    }
+    
+    @keyframes drift {
+      from { transform: translate(0, 0); }
+      to { transform: translate(50px, 50px); }
+    }
+    
+    .container {
+      background: white;
+      padding: 48px 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      width: 100%;
+      max-width: 480px;
+      position: relative;
+      z-index: 1;
+      animation: slideUp 0.6s ease;
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .logo {
+      text-align: center;
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #0EA5E9, #06B6D4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 8px;
+      color: #1E293B;
+      font-size: 28px;
+      font-weight: 800;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #64748B;
+      font-size: 14px;
+      margin-bottom: 32px;
+      font-weight: 500;
+    }
+    
+    .invite-info {
+      background: #F8FAFC;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 32px;
+      border-left: 4px solid #0EA5E9;
+    }
+    
+    .invite-info h3 {
+      font-size: 16px;
+      color: #1E293B;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    
+    .invite-detail {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #E2E8F0;
+    }
+    
+    .invite-detail:last-child {
+      border-bottom: none;
+    }
+    
+    .invite-label {
+      font-size: 13px;
+      color: #64748B;
+      font-weight: 600;
+    }
+    
+    .invite-value {
+      font-size: 13px;
+      color: #1E293B;
+      font-weight: 600;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #334155;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #E2E8F0;
+      border-radius: 10px;
+      font-size: 15px;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #0EA5E9;
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+    }
+    
+    input:disabled {
+      background: #F1F5F9;
+      cursor: not-allowed;
+    }
+    
+    button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #0EA5E9, #06B6D4);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 8px;
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .message {
+      margin-top: 16px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+    }
+    
+    .error {
+      background: rgba(244, 63, 94, 0.1);
+      color: #F43F5E;
+      border-left: 4px solid #F43F5E;
+    }
+    
+    .success {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10B981;
+      border-left: 4px solid #10B981;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    
+    .spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(14, 165, 233, 0.2);
+      border-top-color: #0EA5E9;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 16px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .note {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid #E2E8F0;
+      color: #64748B;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">⚡</div>
+    <h1>Join Your Team</h1>
+    <p class="subtitle">Complete your account setup</p>
+    
+    <div id="content">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p style="color: #64748B; font-weight: 600;">Verifying invitation...</p>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // ⚠️ IMPORTANT: Replace with your Apps Script URL
+    const API_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+    
+    // Get invite code from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const inviteCode = urlParams.get('code');
+    
+    if (!inviteCode) {
+      showError('Invalid invitation link. Please contact your administrator.');
+    } else {
+      loadInviteInfo();
+    }
+    
+    async function loadInviteInfo() {
+      try {
+        const url = `${API_URL}?action=invite-info&code=${inviteCode}`;
+        const response = await fetch(url);
+        const result = await response.json();
+        
+        if (result.success) {
+          renderForm(result.invite);
+        } else {
+          showError(result.error || 'Invalid or expired invitation');
+        }
+      } catch (error) {
+        console.error('Load invite error:', error);
+        showError('Failed to load invitation: ' + error.message);
+      }
+    }
+    
+    function renderForm(invite) {
+      const content = document.getElementById('content');
+      
+      content.innerHTML = `
+        <div class="invite-info">
+          <h3>✉️ You've been invited!</h3>
+          <div class="invite-detail">
+            <span class="invite-label">Company</span>
+            <span class="invite-value">${invite.company_name}</span>
+          </div>
+          <div class="invite-detail">
+            <span class="invite-label">Role</span>
+            <span class="invite-value">${invite.role}</span>
+          </div>
+          <div class="invite-detail">
+            <span class="invite-label">Department</span>
+            <span class="invite-value">${invite.department}</span>
+          </div>
+          <div class="invite-detail">
+            <span class="invite-label">Invited By</span>
+            <span class="invite-value">${invite.invited_by}</span>
+          </div>
+        </div>
+        
+        <form id="acceptForm">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input 
+              type="email" 
+              id="email" 
+              value="${invite.email}"
+              disabled
+            >
+          </div>
+          
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input 
+              type="text" 
+              id="name" 
+              placeholder="Enter your full name"
+              required
+              autofocus
+            >
+          </div>
+          
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input 
+              type="password" 
+              id="password" 
+              placeholder="Create a password (min 8 characters)"
+              required
+              minlength="8"
+            >
+          </div>
+          
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input 
+              type="password" 
+              id="confirmPassword" 
+              placeholder="Confirm your password"
+              required
+              minlength="8"
+            >
+          </div>
+          
+          <button type="submit" id="acceptBtn">Create Account & Login</button>
+          
+          <div id="message"></div>
+        </form>
+        
+        <div class="note">
+          By creating an account, you agree to join ${invite.company_name}'s dashboard
+          with the role of ${invite.role}.
+        </div>
+      `;
+      
+      // Setup form handler
+      document.getElementById('acceptForm').addEventListener('submit', handleAccept);
+    }
+    
+    async function handleAccept(e) {
+      e.preventDefault();
+      
+      const btn = document.getElementById('acceptBtn');
+      const messageDiv = document.getElementById('message');
+      const name = document.getElementById('name').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      // Validate passwords match
+      if (password !== confirmPassword) {
+        messageDiv.innerHTML = '<div class="message error">Passwords do not match</div>';
+        return;
+      }
+      
+      btn.disabled = true;
+      btn.textContent = 'Creating account...';
+      messageDiv.innerHTML = '';
+      
+      try {
+        const url = `${API_URL}?action=accept-invite&code=${inviteCode}&name=${encodeURIComponent(name)}&password=${encodeURIComponent(password)}`;
+        const response = await fetch(url);
+        const result = await response.json();
+        
+        if (result.success) {
+          // Store token and user data (auto-login)
+          localStorage.setItem('token', result.token);
+          localStorage.setItem('user', JSON.stringify(result.user));
+          
+          messageDiv.innerHTML = '<div class="message success">✓ Account created! Redirecting...</div>';
+          
+          setTimeout(() => {
+            window.location.href = 'portal.html';
+          }, 1000);
+          
+        } else {
+          messageDiv.innerHTML = `<div class="message error">${result.error || 'Failed to create account'}</div>`;
+          btn.disabled = false;
+          btn.textContent = 'Create Account & Login';
+        }
+        
+      } catch (error) {
+        console.error('Accept invite error:', error);
+        messageDiv.innerHTML = '<div class="message error">Connection error. Please try again.</div>';
+        btn.disabled = false;
+        btn.textContent = 'Create Account & Login';
+      }
+    }
+    
+    function showError(message) {
+      document.getElementById('content').innerHTML = `
+        <div class="message error">${message}</div>
+      `;
+    }
+  </script>
+</body>
+</html>

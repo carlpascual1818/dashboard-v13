@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - COO Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    body::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: drift 20s linear infinite;
+    }
+    
+    @keyframes drift {
+      from { transform: translate(0, 0); }
+      to { transform: translate(50px, 50px); }
+    }
+    
+    .login-container {
+      background: white;
+      padding: 48px 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+      z-index: 1;
+      animation: slideUp 0.6s ease;
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .logo {
+      text-align: center;
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #0EA5E9, #06B6D4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 8px;
+      color: #1E293B;
+      font-size: 28px;
+      font-weight: 800;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #64748B;
+      font-size: 14px;
+      margin-bottom: 32px;
+      font-weight: 500;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #334155;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #E2E8F0;
+      border-radius: 10px;
+      font-size: 15px;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #0EA5E9;
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+    }
+    
+    button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #0EA5E9, #06B6D4);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 8px;
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .message {
+      margin-top: 16px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+    }
+    
+    .error {
+      background: rgba(244, 63, 94, 0.1);
+      color: #F43F5E;
+      border-left: 4px solid #F43F5E;
+    }
+    
+    .success {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10B981;
+      border-left: 4px solid #10B981;
+    }
+    
+    .demo-info {
+      text-align: center;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid #E2E8F0;
+      color: #64748B;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    
+    .demo-info strong {
+      color: #334155;
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    
+    .demo-credentials {
+      background: #F8FAFC;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo">⚡</div>
+    <h1>COO Dashboard</h1>
+    <p class="subtitle">Multi-Tenant System v13</p>
+    
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          placeholder="you@company.com"
+          required 
+          autocomplete="email"
+        >
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password"
+          placeholder="Enter your password"
+          required 
+          autocomplete="current-password"
+        >
+      </div>
+      
+      <button type="submit" id="loginBtn">Login</button>
+      
+      <div id="message"></div>
+    </form>
+    
+    <div class="demo-info">
+      <strong>📌 Demo Account</strong>
+      <div class="demo-credentials">
+        <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5e3129303b2c1e3a3b3331703d3133">[email&#160;protected]</a><br>
+        password: demo123
+      </div>
+      <p style="margin-top: 12px; font-size: 12px;">
+        This is a multi-tenant system.<br>Each company has separate data.
+      </p>
+    </div>
+  </div>
+  
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // ⚠️ IMPORTANT: Replace with your Apps Script URL
+    const API_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+    
+    console.log('Login page loaded');
+    console.log('API_URL:', API_URL);
+    
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      console.log('Form submitted');
+      
+      const btn = document.getElementById('loginBtn');
+      const messageDiv = document.getElementById('message');
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      btn.disabled = true;
+      btn.textContent = 'Logging in...';
+      messageDiv.innerHTML = '';
+      
+      try {
+        const url = `${API_URL}?action=login&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+        console.log('Calling API:', url);
+        
+        const response = await fetch(url);
+        console.log('Response status:', response.status);
+        
+        const data = await response.json();
+        console.log('Response data:', data);
+        
+        if (data.success) {
+          // Store token and user data
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
+          
+          messageDiv.innerHTML = '<div class="message success">✓ Login successful! Redirecting...</div>';
+          
+          console.log('Login successful, redirecting to portal.html');
+          
+          setTimeout(() => {
+            window.location.href = 'portal.html';
+          }, 500);
+          
+        } else {
+          messageDiv.innerHTML = `<div class="message error">${data.error || 'Login failed'}</div>`;
+          btn.disabled = false;
+          btn.textContent = 'Login';
+        }
+        
+      } catch (error) {
+        console.error('Login error:', erro
